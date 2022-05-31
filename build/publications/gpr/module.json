@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.github.guqing",
+    "module": "pluggable-suite",
+    "version": "1.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "pluggable-suite-1.0-SNAPSHOT-plain.jar",
+          "url": "pluggable-suite-1.0-SNAPSHOT-plain.jar",
+          "size": 19369302,
+          "sha512": "f3160c5cb732be3ff11d21fe5da3c30357b77b032d1f0ce88f87d5d4cfd8ab15742116ecc4768e9b9a07f9d445f0f5fb0818c2ac6fa8920c669fa94be62c76b5",
+          "sha256": "5ce8c98691091ff51184174bc61001e57ab162619c2e95a4b68ade1089f1a883",
+          "sha1": "70bf0267d0ff91544dc8335c32b7ce3cca9042bd",
+          "md5": "b23bdc8dce7fd08c1185c2cea699076b"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.pf4j",
+          "module": "pf4j",
+          "version": {
+            "requires": "3.6.0"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web",
+          "version": {
+            "requires": "3.0.0-M3"
+          }
+        },
+        {
+          "group": "org.projectlombok",
+          "module": "lombok",
+          "version": {
+            "requires": "1.18.24"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "pluggable-suite-1.0-SNAPSHOT-plain.jar",
+          "url": "pluggable-suite-1.0-SNAPSHOT-plain.jar",
+          "size": 19369302,
+          "sha512": "f3160c5cb732be3ff11d21fe5da3c30357b77b032d1f0ce88f87d5d4cfd8ab15742116ecc4768e9b9a07f9d445f0f5fb0818c2ac6fa8920c669fa94be62c76b5",
+          "sha256": "5ce8c98691091ff51184174bc61001e57ab162619c2e95a4b68ade1089f1a883",
+          "sha1": "70bf0267d0ff91544dc8335c32b7ce3cca9042bd",
+          "md5": "b23bdc8dce7fd08c1185c2cea699076b"
+        }
+      ]
+    }
+  ]
+}
