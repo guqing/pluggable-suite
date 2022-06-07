@@ -6,28 +6,26 @@ plugins {
 }
 
 group 'io.github.guqing'
-version '1.0-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     maven { url 'https://repo.spring.io/milestone' }
     mavenCentral()
-
 }
 
 publishing {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/guqing/pluggable-suite")
+            name = "SonatypeSnapShotsPackages"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = project.findProperty("ossr.user") ?: System.getenv("OSSR_USERNAME")
+                password = project.findProperty("ossr.password") ?: System.getenv("OSSR_PASSWORD")
             }
         }
     }
     publications {
-        gpr(MavenPublication) {
+        ossr(MavenPublication) {
             from(components.java)
             versionMapping {
                 usage('java-api') {
@@ -47,15 +45,19 @@ bootJar {
 
 jar {
     enabled = true
+    manifest {
+        attributes "Implementation-Title": "Halo Pluggable Suite",
+                "Implementation-Version": archiveVersion
+    }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 dependencies {
     implementation 'org.pf4j:pf4j:3.6.0'
     implementation "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    compileOnly 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
