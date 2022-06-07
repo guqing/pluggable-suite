@@ -47,20 +47,15 @@ bootJar {
 
 jar {
     enabled = true
-//    manifest {
-//        attributes('Implementation-Title': project.name,
-//                'Implementation-Version': project.version)
-//    }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 dependencies {
     implementation 'org.pf4j:pf4j:3.6.0'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
-
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
