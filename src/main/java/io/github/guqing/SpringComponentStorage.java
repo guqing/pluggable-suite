@@ -1,4 +1,4 @@
-package com.github.guqing;
+package io.github.guqing;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;

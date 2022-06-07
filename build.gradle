@@ -5,7 +5,7 @@ plugins {
     id 'java'
 }
 
-group 'com.github.guqing'
+group 'io.github.guqing'
 version '1.0-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_17
 

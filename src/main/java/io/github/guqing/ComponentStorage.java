@@ -1,4 +1,4 @@
-package com.github.guqing;
+package io.github.guqing;
 
 import java.io.BufferedReader;
 import java.io.IOException;

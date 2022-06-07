@@ -1,4 +1,4 @@
-package com.github.guqing;
+package io.github.guqing;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
