@@ -1,14 +1,12 @@
-package io.github.guqing;
+package io.github.guqing.suite;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -17,8 +15,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import org.pf4j.Extension;
 import org.pf4j.processor.ExtensionStorage;
@@ -38,24 +34,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @author guqing
  */
 public class PluggableAnnotationProcessor extends AbstractProcessor {
-    private static final List<Class<? extends Annotation>> extensionAnnotationNames = List.of(Extension.class,
-        Service.class,
-        Controller.class,
-        RestController.class,
-        Component.class,
-        Configuration.class);
+    private static final List<Class<? extends Annotation>> extensionAnnotationNames =
+        List.of(Extension.class,
+            Service.class,
+            Controller.class,
+            RestController.class,
+            Component.class,
+            Configuration.class);
 
     private static final String STORAGE_CLASS_NAME = "halo.pluggable.storageClassName";
+
     private static final String IGNORE_EXTENSION_POINT = "halo.pluggable.ignoreExtensionPoint";
 
-    private final Map<String, Set<String>> extensions = new HashMap<>();
     private final Set<String> components = new LinkedHashSet<>();
-    // the key is the extension point
-    private Map<String, Set<String>> oldExtensions = new HashMap<>();
-    // the key is the extension point
 
     private ComponentStorage storage;
-    private boolean ignoreExtensionPoint;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -65,7 +58,6 @@ public class PluggableAnnotationProcessor extends AbstractProcessor {
         info("Options %s", processingEnv.getOptions());
 
         initStorage();
-        initIgnoreExtensionPoint();
     }
 
     @Override
@@ -162,39 +154,21 @@ public class PluggableAnnotationProcessor extends AbstractProcessor {
         return this.components;
     }
 
-    public Map<String, Set<String>> getOldExtensions() {
-        return oldExtensions;
-    }
-
     public ComponentStorage getStorage() {
         return storage;
     }
 
     private void processExtensionElement(Element element) {
         // check if @Extension is put on class and not on method or constructor
-        if (!(element instanceof TypeElement)) {
+        if (!(element instanceof TypeElement extensionElement)) {
             error(element, "Put annotation only on classes (no methods, no fields)");
             return;
         }
-
-        // check if class extends/implements an extension point
-//        if (!ignoreExtensionPoint && !isExtension(element.asType())) {
-//            error(element, "%s is not an extension (it doesn't implement ExtensionPoint)", element);
-//            return;
-//        }
-
-        TypeElement extensionElement = (TypeElement) element;
-//        List<TypeElement> extensionPointElements = findExtensionPoints(extensionElement);
-//        if (extensionPointElements.isEmpty()) {
-//            error(element, "No extension points found for extension %s", extensionElement);
-//            return;
-//        }
 
         String extension = getBinaryName(extensionElement);
         components.add(extension);
     }
 
-    @SuppressWarnings("unchecked")
     private void initStorage() {
         // search in processing options
         String storageClassName = processingEnv.getOptions().get(STORAGE_CLASS_NAME);
@@ -206,8 +180,8 @@ public class PluggableAnnotationProcessor extends AbstractProcessor {
         if (storageClassName != null) {
             // use reflection to create the storage instance
             try {
-                Class storageClass = getClass().getClassLoader().loadClass(storageClassName);
-                Constructor constructor =
+                Class<?> storageClass = getClass().getClassLoader().loadClass(storageClassName);
+                Constructor<?> constructor =
                     storageClass.getConstructor(PluggableAnnotationProcessor.class);
                 storage = (ComponentStorage) constructor.newInstance(this);
             } catch (Exception e) {
@@ -220,16 +194,4 @@ public class PluggableAnnotationProcessor extends AbstractProcessor {
             storage = new SpringComponentStorage(this);
         }
     }
-
-    private void initIgnoreExtensionPoint() {
-        // search in processing options and system properties
-        ignoreExtensionPoint =
-            getProcessingEnvironment().getOptions().containsKey(IGNORE_EXTENSION_POINT) ||
-                System.getProperty(IGNORE_EXTENSION_POINT) != null;
-    }
-
-    private TypeElement getElement(TypeMirror typeMirror) {
-        return (TypeElement) ((DeclaredType) typeMirror).asElement();
-    }
-
 }
